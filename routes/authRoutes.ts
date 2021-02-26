@@ -1,11 +1,12 @@
-const { Router } = require('express')
-const { register_post } = require('../controllers/authController')
+import { Router } from 'express';
+import  * as authController from '../controllers/authController';
 
 const router = Router();
 
-router.get('/register', () => {});
-router.post('/register', register_post);
-router.get('/login', () => {});
-router.post('/login', () => {});
+router.get('/register', authController.register_get);
+router.post('/register', authController.register_post);
+router.get('/login', authController.login_get);
+router.post('/login', authController.login_post);
+router.get('/logout', authController.logout_get);
 
 module.exports = router;

@@ -2,12 +2,16 @@ import {model, Model, Document, Schema} from 'mongoose';
 const { isEmail } = require('validator');
 const bcrypt = require('bcrypt');
 
-export interface IUser extends Document {
+export interface IUserDocument extends Document {
     email: string;
     password: string;
 }
 
-const userSchema = new Schema({
+export interface IUserModel extends Model<IUserDocument> {
+    login(email: string, password: string): Promise<IUserDocument>;
+}
+
+const userSchema: Schema = new Schema({
     email: {
         type: String,
         required: [true, "Please enter an email address"],
@@ -22,10 +26,21 @@ const userSchema = new Schema({
     }
 });
 
-userSchema.pre<IUser>('save', async function(next) {
+userSchema.pre<IUserDocument>('save', async function(next) {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
     next();
 });
 
-export const User = model<IUser>('user', userSchema);
+userSchema.statics.login = async function (email: string, password: string): Promise<IUserDocument> {
+    const user = await User.findOne({email});
+    if(user) {
+        const auth = await bcrypt.compare(password, user.password);
+        if(auth) {
+            return user;
+        }
+    }
+    throw "Email or password incorrect";
+}
+
+export const User: IUserModel = model<IUserDocument, IUserModel>('user', userSchema);

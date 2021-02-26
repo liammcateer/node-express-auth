@@ -1,0 +1,48 @@
+<%- include('partials/header'); -%>
+<form action="" id="login_form">
+    <div id="error_message"></div>
+    <label for="email">Email:</label>
+    <input id="email" type="text" name="email">
+    <br>
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password">
+    <br>
+    <input id="submit" type="submit">
+</form>
+
+<script>
+    const loginForm = document.getElementById('login_form');
+    const errorMessage = document.getElementById('error_message');
+
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        errorMessage.innerHTML = '';
+
+        const email = loginForm.email.value;
+        const password = loginForm.password.value;
+
+        try{
+            const res = await fetch('/login', {
+                method: 'POST',
+                body: JSON.stringify({email, password}),
+                headers: {'Content-Type': 'application/json'},
+            });
+
+            const data = await res.json();
+            console.log(data);
+            if(res.ok){
+                location.assign('/');
+            } else if(res.status === 400) {
+                errorMessage.innerHTML = data;
+            } else{
+                errorMessage.innerHTML = 'Server error occured, please try again.';
+            }
+
+        } catch (err) {
+            errorMessage.innerHTML = 'Server error occured, please try again.';
+        }
+    });
+</script>
+</body>
+</html>

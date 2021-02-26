@@ -1,0 +1,55 @@
+<%- include('partials/header'); -%>
+<form action="" id="register_form">
+    <div id="server_error"></div>
+    <label for="email">Email:</label>
+    <input id="email" type="text" name="email">
+    <div id="email_error"></div>
+    <br>
+    <label for="password">Password:</label>
+    <input id="password" type="password" name="password">
+    <div id="password_error"></div>
+    <br>
+    <input id="submit" type="submit">
+</form>
+
+<script>
+    const registerForm = document.getElementById('register_form');
+    const emailError = document.getElementById('email_error');
+    const passwordError = document.getElementById('password_error');
+    const serverError = document.getElementById('server_error');
+
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        emailError.innerHTML = '';
+        passwordError.innerHTML = '';
+        serverError.innerHTML = '';
+
+        const email = registerForm.email.value;
+        const password = registerForm.password.value;
+
+        try{
+            const res = await fetch('/register', {
+                method: 'POST',
+                body: JSON.stringify({email, password}),
+                headers: {'Content-Type': 'application/json'},
+            });
+
+            const data = await res.json();
+            
+            if(res.ok){
+                location.assign('/');
+            } else if(res.status === 400) {
+                emailError.innerHTML = data.email;
+                passwordError.innerHTML = data.password;
+            } else{
+                serverError.innerHTML = 'Server error occured, please try again.';
+            }
+
+        } catch (err) {
+            serverError.innerHTML = 'Server error occured, please try again.';
+        }
+    });
+</script>
+</body>
+</html>
