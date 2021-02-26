@@ -9,9 +9,10 @@ const app = express();
 const authRoutes = require('./routes/authRoutes')
 const port = process.env.PORT || 3000
 
+app.use(express.static('public'));
 app.use(express.json());
-app.set('view engine', 'ejs');
 app.use(cookieParser());
+app.set('view engine', 'ejs');
 
 const dbURI = process.env.DB_CONNECTION_STRING;
 if(dbURI){
