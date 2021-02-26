@@ -8,7 +8,7 @@ export class Configuration <T extends string>{
     }
 
     private initialise(){
-        if(process.env.ENVIRONMENT === 'PRODUCTION'){
+        if(process.env.ENVIRONMENT){
             Object.keys(this).forEach((key) => {
                 const variable:any =  process.env[key.toUpperCase()];
                 if(variable){
