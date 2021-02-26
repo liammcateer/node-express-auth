@@ -3,6 +3,7 @@ import {Request, Response} from 'express';
 import mongoose from 'mongoose';
 import mongodb from 'mongodb';
 import jwt from 'jsonwebtoken';
+import { configuration } from '../configuration';
 
 const jwtExpireTime = 3 * 24 * 60 * 60;
 
@@ -10,7 +11,9 @@ export const register_post = async (req: Request, res: Response) => {
     const {email, password} = req.body;
     try {
         const user = await User.create({email, password});
-        res.status(201).json(user);
+        const jwtToken = generateJwtToken(user._id);
+        res.cookie('jwt', jwtToken, { httpOnly: true, maxAge: jwtExpireTime * 1000 })
+        res.sendStatus(201);
     } catch (err) {
         res.status(400).json(handleValidationError(err))
     }
@@ -42,14 +45,9 @@ export const logout_get = async (req: Request, res: Response) => {
 }
 
 function generateJwtToken(userId: string): string {
-    const secret = process.env.JWT_SECRET;
-    if(secret){
-        return jwt.sign({ userId }, secret, {
-            expiresIn:  jwtExpireTime,
-        });
-    }
-    console.error('JWT secret missing');
-    throw ("Server error");
+    return jwt.sign({ userId }, configuration.jwtSecret, {
+        expiresIn:  jwtExpireTime,
+    });
     
 }
 

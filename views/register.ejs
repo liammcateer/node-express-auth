@@ -34,12 +34,11 @@
                 body: JSON.stringify({email, password}),
                 headers: {'Content-Type': 'application/json'},
             });
-
-            const data = await res.json();
             
             if(res.ok){
                 location.assign('/');
             } else if(res.status === 400) {
+                const data = await res.json();
                 emailError.innerHTML = data.email;
                 passwordError.innerHTML = data.password;
             } else{
