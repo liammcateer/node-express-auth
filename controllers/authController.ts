@@ -1,4 +1,4 @@
-import { User } from '../models/User'
+import User from '../models/User'
 import {Request, Response} from 'express';
 import mongoose from 'mongoose';
 import mongodb from 'mongodb';
