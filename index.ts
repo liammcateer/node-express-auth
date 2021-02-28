@@ -2,7 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import { configuration } from './configuration';
-import { requireAuth } from './middleware/authMiddleware';
+import { checkUser, requireAuth } from './middleware/authMiddleware';
 
 const app = express();
 const authRoutes = require('./routes/authRoutes')
@@ -17,7 +17,7 @@ mongoose.connect(configuration.databaseURI, { useNewUrlParser: true, useUnifiedT
 .then((result: any) => app.listen(configuration.port, () => console.log('Server started on port:', configuration.port)))
 .catch((err: any) => console.log(err));
 
-  
+app.get('*', checkUser);
 app.get('/', (req: express.Request, res: express.Response) => {
   res.render('home');
 });
