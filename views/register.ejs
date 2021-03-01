@@ -1,29 +1,39 @@
 <%- include('partials/header'); -%>
-<h3>Register</h3>
-<form action="" id="register_form">
-    <div id="server_error"></div>
-    <label for="email">Email:</label>
-    <input id="email" type="text" name="email">
-    <div id="email_error"></div>
-    <label for="password">Password:</label>
-    <input id="password" type="password" name="password">
-    <div id="password_error"></div>
-    <br>
-    <input id="submit" type="submit" value="Register">
-</form>
+<main>
+    <div class="form-wrapper">
+        <form id="register_form" class="authentication_form">
+            <h3>Register</h3>
+            <div id="error_message" class="alert alert-danger" role="alert"></div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email" aria-describedby="emailHelp">
+              <div id="email_error" class="form-text form-input-error"></div>
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password">
+              <div id="password_error" class="form-text form-input-error"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Register</button>
+            <div class="form-link form-text">
+                Already registered? <a href="/login">Login</a>
+            </div>
+        </form>
+    </div>
+</main>
 
 <script>
     const registerForm = document.getElementById('register_form');
     const emailError = document.getElementById('email_error');
     const passwordError = document.getElementById('password_error');
-    const serverError = document.getElementById('server_error');
+    const errorMessage = document.getElementById('error_message');
 
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         emailError.innerHTML = '';
         passwordError.innerHTML = '';
-        serverError.innerHTML = '';
+        errorMessage.innerHTML = '';
 
         const email = registerForm.email.value;
         const password = registerForm.password.value;
@@ -42,13 +52,14 @@
                 emailError.innerHTML = data.email;
                 passwordError.innerHTML = data.password;
             } else{
-                serverError.innerHTML = 'Server error occured, please try again.';
+                errorMessage.innerHTML = 'Server error occured, please try again.';
+                errorMessage.style.display = 'block';
             }
 
         } catch (err) {
-            serverError.innerHTML = 'Server error occured, please try again.';
+            errorMessage.innerHTML = 'Server error occured, please try again.';
+            errorMessage.style.display = 'block';
         }
     });
 </script>
-</body>
-</html>
+<%- include('partials/footer'); -%>

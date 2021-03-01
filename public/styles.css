@@ -21,8 +21,12 @@ footer {
 
 main {
     flex: auto;
+    color: black;
     background-color: slateblue;
-    color: black
+}
+
+#front-page-main{
+    background-color: slateblue;
 }
 
 #splash{
@@ -59,4 +63,34 @@ footer a{
 nav{
     background-color: darkslateblue;
     box-shadow: 0px 2px 5px #282828;
+}
+
+.authentication_form{
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px #282828;
+    width: 100%;
+    background-color: white;
+}
+
+.form-input-error{
+    color: red;
+}
+
+#error_message{
+    display: none;
+}
+
+.form-wrapper{
+    height: 80%;
+    display: flex;
+    max-width: 400px;
+    margin: auto;
+    align-items: center;
+}
+
+.form-link{
+    margin-top: 10px;
+    display: block;
+    text-align: center;
 }
